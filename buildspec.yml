@@ -14,7 +14,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+     # - docker build -t $REPOSITORY_URI:latest .
+      - docker build -t $REPOSITORY_URI:latest . --build-arg ACCESS_ID=${ACCESS_ID} --build-arg SECRET_ACCESS=${SECRET_ACCESS}
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
