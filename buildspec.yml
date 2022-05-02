@@ -1,10 +1,5 @@
 version: 0.2
 
-env:
-  secrets-manager:
-    ACCESS_ID: "aws-access:AWS_ACCESS_KEY_ID"
-    SECRET_ACCESS: "aws-access:AWS_SECRET_ACCESS_KEY"
-
 phases:
   pre_build:
     commands:
@@ -22,8 +17,6 @@ phases:
       - SECRET_JSON=$(aws secretsmanager get-secret-value --secret-id aws-access)
       - ACCESS_ID=$(echo $SECRET_JSON | jq -r '.SecretString' | jq -r .AWS_ACCESS_KEY_ID)
       - SECRET_ACCESS=$(echo $SECRET_JSON | jq -r '.SecretString' | jq -r .AWS_SECRET_ACCESS_KEY)
-      - echo $ACCESS_ID
-      - echo $SECRET_ACCESS
      # - docker build -t $REPOSITORY_URI:latest .
       - docker build -t $REPOSITORY_URI:latest . --build-arg ACCESS_ID=${ACCESS_ID} --build-arg SECRET_ACCESS=${SECRET_ACCESS}
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
